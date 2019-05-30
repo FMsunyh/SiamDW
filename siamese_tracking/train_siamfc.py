@@ -34,7 +34,7 @@ def parse_args():
     """
     parser = argparse.ArgumentParser(description='Train SiamFC')
     # general
-    parser.add_argument('--cfg', required=True, type=str, default='experiments/train/SiamFC.yaml', help='yaml configure file name')
+    parser.add_argument('--cfg', required=True, type=str, default='/home/syh/siamdw/experiments/train/SiamFC.yaml', help='yaml configure file name')
 
     args, rest = parser.parse_known_args()
     # update config
@@ -110,7 +110,7 @@ def main():
     logger.info(pprint.pformat(config))
 
     writer_dict = {
-        'writer': SummaryWriter(log_dir=tb_log_dir),
+        'writer': SummaryWriter(logdir=tb_log_dir),
         'train_global_steps': 0,
     }
 

@@ -102,6 +102,9 @@ ENV/
 #data
 data/
 
+# model weight
+pretrain/
+
 .idea/
 inria/
 

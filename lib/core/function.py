@@ -17,7 +17,7 @@ from utils.utils import print_speed
 def siamfc_train(train_loader, model,  optimizer, epoch, cur_lr, cfg, writer_dict, logger):
     # unfix for FREEZE-OUT method
     # model, optimizer = unfix_more(model, optimizer, epoch, cfg, cur_lr, logger)
-
+    logger.info('start train')
     # prepare
     batch_time = AverageMeter()
     data_time = AverageMeter()

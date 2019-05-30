@@ -13,19 +13,19 @@ SIAMFC:
     SEARCH_SIZE: 255
     STRIDE: 8
     PAIRS: 600000
-    PRETRAIN: './pretrain/CIResNet22_PRETRAIN.model'
+    PRETRAIN: '/home/syh/siamdw/pretrain/CIResNet22_PRETRAIN.model'
     LR_POLICY: 'log'
     LR: 0.001
     LR_END: 0.0000001
     MOMENTUM: 0.9
     WEIGHT_DECAY: 0.0001
-    WHICH_USE: 'VID'  # VID or 'GOT10K'
+    WHICH_USE: 'GOT10K'  # VID or 'GOT10K'
   TEST:    # TEST model is same as TRAIN.MODEL
-    DATA: 'VOT2017'
+    DATA: 'VOT2016'
     START_EPOCH: 30
     END_EPOCH: 50
   TUNE:    # TUNE model is same as TRAIN.MODEL
-    DATA: 'VOT2017'
+    DATA: 'VOT2016'
     METHOD: 'GENE'
   DATASET:
     SHIFT: 4
@@ -38,5 +38,5 @@ SIAMFC:
       PATH: '/data2/vid/crop511'
       ANNOTATION: '/data2/vid/train.json'
     GOT10K:
-      PATH: '/data2/got10k/crop511'
-      ANNOTATION: '/data2/got10k/train.json'
+      PATH: '/home/syh/siamdw/data/GOT10k/crop271'
+      ANNOTATION: '/home/syh/siamdw/data/GOT10k/train.json'

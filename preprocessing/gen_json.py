@@ -5,7 +5,7 @@ import json
 import numpy as np
 
 print('loading json (raw got10k info), please wait 20 seconds~')
-got10k = json.load(open('got10k.json', 'r'))
+got10k = json.load(open('/home/syh/siamdw/data/GOT10k/got10k.json', 'r'))
 
 
 def check_size(frame_sz, bbox):
