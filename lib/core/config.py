@@ -13,8 +13,8 @@ from easydict import EasyDict as edict
 config = edict()
 
 # ------config for general parameters------
-config.GPUS = "0,1,2,3"
-config.WORKERS = 32
+config.GPUS = "0"
+config.WORKERS = 8
 config.PRINT_FREQ = 10
 config.OUTPUT_DIR = 'logs'
 config.CHECKPOINT_DIR = 'snapshot'
@@ -40,9 +40,13 @@ config.SIAMFC.DATASET.ROTATION = 0
 config.SIAMFC.DATASET.VID.PATH = '/home/zhbli/Dataset/data2/vid/crop511'
 config.SIAMFC.DATASET.VID.ANNOTATION = '/home/zhbli/Dataset/data2/vid/train.json'
 
+# # got10k
+# config.SIAMFC.DATASET.GOT10K.PATH = '/home/zhbli/Dataset/data3/got10k/crop511'
+# config.SIAMFC.DATASET.GOT10K.ANNOTATION = '/home/zhbli/Dataset/data3/got10k/train.json'
+
 # got10k
-config.SIAMFC.DATASET.GOT10K.PATH = '/home/zhbli/Dataset/data3/got10k/crop511'
-config.SIAMFC.DATASET.GOT10K.ANNOTATION = '/home/zhbli/Dataset/data3/got10k/train.json'
+config.SIAMFC.DATASET.GOT10K.PATH = '/home/syh/siamdw/data/GOT10k/crop271/'
+config.SIAMFC.DATASET.GOT10K.ANNOTATION = '/home/syh/siamdw/data/GOT10k/train.json'
 
 # train
 config.SIAMFC.TRAIN.MODEL = "SiamFCIncep22"

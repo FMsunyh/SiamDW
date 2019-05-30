@@ -29,7 +29,7 @@ class SiamRPN(object):
         # single test
         if not hp and not self.info.epoch_test:
             prefix = [x for x in ['OTB', 'VOT'] if x in self.info.dataset]
-            cfg = load_yaml('./experiments/test/{0}/{1}.yaml'.format(prefix[0], self.info.arch))
+            cfg = load_yaml('/home/syh/siamdw/experiments/test/{0}/{1}.yaml'.format(prefix[0], self.info.arch))
             cfg_benchmark = cfg[self.info.dataset]
             p.update(cfg_benchmark)
             p.renew()
