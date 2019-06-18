@@ -38,5 +38,5 @@ SIAMFC:
       PATH: '/data2/vid/crop511'
       ANNOTATION: '/data2/vid/train.json'
     GOT10K:
-      PATH: '/home/syh/siamdw/data/GOT10k/crop271'
+      PATH: '/home/syh/siamdw/data/GOT10k/crop511'
       ANNOTATION: '/home/syh/siamdw/data/GOT10k/train.json'

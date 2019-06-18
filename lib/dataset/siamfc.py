@@ -16,11 +16,12 @@ import random
 import logging
 import numpy as np
 import torchvision.transforms as transforms
+from PIL import Image
 from scipy.ndimage.filters import gaussian_filter
 from os.path import join
 from easydict import EasyDict as edict
 from torch.utils.data import Dataset
-
+import matplotlib.pyplot as plt
 import sys
 sys.path.append('../')
 from utils.utils import *
@@ -28,6 +29,17 @@ from core.config import config
 
 sample_random = random.Random()
 # sample_random.seed(123456)
+
+def CV2PIL(image):
+    img = Image.fromarray(cv2.cvtColor(image,cv2.COLOR_BGR2RGB))
+
+    return img.copy()
+
+
+def PIL2CV(image):
+    img = cv2.cvtColor(np.asarray(image),cv2.COLOR_RGB2BGR)
+
+    return img.copy()
 
 
 class SiamFCDataset(Dataset):
@@ -45,6 +57,12 @@ class SiamFCDataset(Dataset):
         self.blur = cfg.SIAMFC.DATASET.BLUR
         self.shift = cfg.SIAMFC.DATASET.SHIFT
         self.scale = cfg.SIAMFC.DATASET.SCALE
+
+        self.save_path = cfg.SIAMFC.DATASET.SAVE_PATH
+
+        if not os.path.exists(self.save_path):
+            os.makedirs(self.save_path+'/1')
+            os.makedirs(self.save_path+'/2')
 
         self.transform_extra = transforms.Compose(
             [transforms.ToPILImage(), ] +
@@ -81,23 +99,61 @@ class SiamFCDataset(Dataset):
         index = self.pick[index]
         template, search = self._get_pairs(index)
 
+        template_path = template[0]
+        search_path = search[0]
+
         template_image = cv2.imread(template[0])
         search_image = cv2.imread(search[0])
+
+        # bbox =  center2corner(Center(search[1][0],search[1][1],search[1][2],search[1][3]))
+        bbox =  search[1]
+        search_image =  self._draw(search_image,  bbox, name='')
+        plt.imshow(search_image)
+        plt.title('origin')
+        plt.show()
 
         template_box = self._toBBox(template_image, template[1])
         search_box = self._toBBox(search_image, search[1])
 
-        template, _, _ = self._augmentation(template_image, template_box, self.template_size)
+        draw_search =  self._draw(search_image, search_box,name='')
+
+        plt.imshow(draw_search)
+        plt.title('x')
+        plt.show()
+
+        # self._save_image_1(template_image,template_box,index, flag='z')
+        # self._save_image_1(search_image,search_box,index,flag='x')
+
+        template, bbox_, _ = self._augmentation(template_image, template_box, self.template_size)
         search, bbox, dag_param = self._augmentation(search_image, search_box, self.search_size)
+
+        # self._save_image_2(PIL2CV(template), index, flag='z')
+        # self._save_image_2(PIL2CV(search), index,flag='x')
+
 
         # from PIL image to numpy
         template = np.array(template)
         search = np.array(search)
 
+        # draw_search =  self._draw(search, bbox,name='')
+
+        # plt.imshow(draw_search)
+        # plt.title('x')
+        # plt.show()
+        #
+        # # plt.imshow(template)
+        # # plt.title('z')
+        # # plt.show()
+        #
+        # draw_template =  self._draw(template, bbox_, name='')
+        # plt.imshow(draw_template)
+        # plt.title('z')
+        # plt.show()
+
+
         out_label = self._dynamic_label([self.size, self.size], dag_param.shift)
 
         template, search = map(lambda x: np.transpose(x, (2, 0, 1)).astype(np.float32), [template, search])
-
         return template, search, out_label, np.array(bbox, np.float32)  # self.label 15*15/17*17
 
     # ------------------------------------
@@ -174,6 +230,7 @@ class SiamFCDataset(Dataset):
         h = h * scale_z
         cx, cy = imw // 2, imh // 2
         bbox = center2corner(Center(cx, cy, w, h))
+        x1, y1, x2, y2 = bbox
         return bbox
 
     def _crop_hwc(self, image, bbox, out_sz, padding=(0, 0, 0)):
@@ -196,10 +253,14 @@ class SiamFCDataset(Dataset):
         """
         draw_image = image.copy()
         x1, y1, x2, y2 = map(lambda x:int(round(x)), box)
-        cv2.rectangle(draw_image, (x1, y1), (x2, y2), (0,255,0))
-        cv2.circle(draw_image, (int(round(x1 + x2)/2), int(round(y1 + y2) /2)), 3, (0, 0, 255))
+        cv2.rectangle(draw_image, (x1, y1), (x2, y2), (200,100,100),3)
+        cv2.circle(draw_image, (int(round(x1 + x2)/2), int(round(y1 + y2) /2)), 10, (0, 0, 255))
         cv2.putText(draw_image, '[x: {}, y: {}]'.format(int(round(x1 + x2)/2), int(round(y1 + y2) /2)), (int(round(x1 + x2)/2) - 3, int(round(y1 + y2) /2) -3), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (255, 255, 255), 1)
-        cv2.imwrite(name, draw_image)
+
+        if name != '':
+            cv2.imwrite(name, draw_image)
+
+        return draw_image
 
     # ------------------------------------
     # function for data augmentation
@@ -266,3 +327,17 @@ class SiamFCDataset(Dataset):
         return label
 
 
+    def _save_image_1(self,image, box, index,flag='z'):
+        # name = os.path.basename(path)
+        #
+        # names = name.split('.')
+
+        save_path = os.path.join(self.save_path, '1', '{}.{}.{}.{}'.format(str(index), '00', flag, 'jpg'))
+        self._draw(image,box, save_path)
+
+    def _save_image_2(self,image, index,flag='z'):
+
+        save_path = os.path.join(self.save_path, '2', '{}.{}.{}.{}'.format(str(index), '01', flag, 'jpg'))
+        draw_image = image.copy()
+
+        cv2.imwrite(save_path, draw_image)

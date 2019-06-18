@@ -1,3 +1,4 @@
+import argparse
 from os.path import join, isdir, exists
 from os import listdir, mkdir, makedirs
 import cv2
@@ -6,10 +7,11 @@ import glob
 from concurrent import futures
 import sys
 import time
-
+import matplotlib.pyplot as plt
 
 got10k_base_path = '/home/syh/train_data/GOT10k/'
 sub_sets = sorted({'train', 'val'})
+# sub_sets = sorted({'val'})
 
 
 # Print iterations progress (thanks StackOverflow)
@@ -93,8 +95,23 @@ def crop_video(sub_set, video, crop_path, instanc_size):
         cv2.imwrite(join(video_crop_base_path, '{:06d}.{:02d}.x.jpg'.format(int(idx), 0)), x)
 
 
-def main(instanc_size=511, num_threads=24):
-    crop_path = '/home/syh/siamdw/data/GOT10k/crop{:d}'.format(instanc_size)
+        plt.imshow(im)
+        plt.title('o')
+        plt.show()
+
+        plt.imshow(z)
+        plt.title('z')
+        plt.show()
+
+        plt.imshow(x)
+        plt.title('x')
+        plt.show()
+
+        print('++++')
+
+
+def main(save_path, instanc_size=511, num_threads=24):
+    crop_path = '{}/crop{:d}'.format(save_path, instanc_size)
     if not exists(crop_path): makedirs(crop_path)
 
     for sub_set in sub_sets:
@@ -108,9 +125,15 @@ def main(instanc_size=511, num_threads=24):
                 printProgress(i, n_videos, prefix=sub_set, suffix='Done ', barLength=40)
 
 
+parser = argparse.ArgumentParser(description='Get the data info')
+parser.add_argument('-d', '--svae_path', help='svae the data', default='/home/syh/siamdw/data/GOT10k')
+parser.add_argument('-i', '--instanc_size', help='instanc size', default=512, type=int)
+parser.add_argument('-w', '--num_threads', help='num threads', default=6,type=int)
+args = parser.parse_args()
+
 if __name__ == '__main__':
     since = time.time()
-    main(int(sys.argv[1]), int(sys.argv[2]))
+    main(args.svae_path, args.instanc_size, args.num_threads)
     time_elapsed = time.time() - since
     print('Total complete in {:.0f}m {:.0f}s'.format(
         time_elapsed // 60, time_elapsed % 60))
@@ -118,5 +141,5 @@ if __name__ == '__main__':
 
 '''
 cd /home/syh/siamdw/preprocessing
-python par_crop.py 271 6
+python par_crop.py -i 512
 '''

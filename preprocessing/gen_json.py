@@ -46,6 +46,7 @@ train = {k:v for (k,v) in snippets.items() if 'train' in k}
 val = {k:v for (k,v) in snippets.items() if 'val' in k}
 
 
+# save_dir = '/home/syh/siamdw/data/GOT10k/'
 save_dir = '/home/syh/siamdw/data/GOT10k/'
 
 if not os.path.exists(save_dir):
@@ -63,6 +64,9 @@ print('Save val data to {}'.format(val_path))
 print('done!')
 
 '''
+# 根据got10k.json的数据信息，划分train和val 数据集
+# 
+
 cd /home/syh/siamdw/preprocessing
 python gen_json.py
 '''

@@ -24,7 +24,7 @@ from utils.utils import load_pretrain, cxy_wh_2_rect, get_axis_aligned_bbox, loa
 
 # for GENE tuning
 from core.eval_otb import eval_performance_tune
-
+from tensorboardX import SummaryWriter
 
 
 def parse_args():
@@ -123,6 +123,8 @@ def main():
     net = load_pretrain(net, args.resume)
     net.eval()
     net = net.cuda()
+
+
 
     # prepare video
     dataset = load_dataset(args.dataset)

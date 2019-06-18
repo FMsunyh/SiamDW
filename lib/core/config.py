@@ -36,6 +36,7 @@ config.SIAMFC.DATASET.FLIP = 0
 config.SIAMFC.DATASET.BLUR = 0
 config.SIAMFC.DATASET.ROTATION = 0
 
+config.SIAMFC.DATASET.SAVE_PATH = '/home/syh/siamdw/data/GOT10k/debug/'
 # vid
 config.SIAMFC.DATASET.VID.PATH = '/home/zhbli/Dataset/data2/vid/crop511'
 config.SIAMFC.DATASET.VID.ANNOTATION = '/home/zhbli/Dataset/data2/vid/train.json'
@@ -45,7 +46,7 @@ config.SIAMFC.DATASET.VID.ANNOTATION = '/home/zhbli/Dataset/data2/vid/train.json
 # config.SIAMFC.DATASET.GOT10K.ANNOTATION = '/home/zhbli/Dataset/data3/got10k/train.json'
 
 # got10k
-config.SIAMFC.DATASET.GOT10K.PATH = '/home/syh/siamdw/data/GOT10k/crop271/'
+config.SIAMFC.DATASET.GOT10K.PATH = '/home/syh/siamdw/data/GOT10k/crop511/'
 config.SIAMFC.DATASET.GOT10K.ANNOTATION = '/home/syh/siamdw/data/GOT10k/train.json'
 
 # train
@@ -56,7 +57,7 @@ config.SIAMFC.TRAIN.END_EPOCH = 50
 config.SIAMFC.TRAIN.TEMPLATE_SIZE = 127
 config.SIAMFC.TRAIN.SEARCH_SIZE = 255
 config.SIAMFC.TRAIN.STRIDE = 8
-config.SIAMFC.TRAIN.BATCH = 32
+config.SIAMFC.TRAIN.BATCH = 1
 config.SIAMFC.TRAIN.PAIRS = 200000
 config.SIAMFC.TRAIN.PRETRAIN = 'resnet23_inlayer.model'
 config.SIAMFC.TRAIN.LR_POLICY = 'log'

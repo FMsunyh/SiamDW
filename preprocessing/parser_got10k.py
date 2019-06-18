@@ -67,6 +67,10 @@ json.dump(got10k, open(save_path, 'w'), indent=4, sort_keys=True)
 print('got10k.json has been saved in {}'.format(save_path))
 
 '''
+# 解析GOT10k的数据，将数据信息存放到got10k.json文件中.
+图片路径
+box坐标
+
 cd /home/syh/siamdw/preprocessing
 python parse_got10k.py
 '''
