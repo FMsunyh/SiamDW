@@ -13,7 +13,7 @@ import cv2
 import random
 import argparse
 import numpy as np
-
+import matlab.engine
 import models.models as models
 
 from os.path import exists, join
@@ -23,8 +23,9 @@ from easydict import EasyDict as edict
 from utils.utils import load_pretrain, cxy_wh_2_rect, get_axis_aligned_bbox, load_dataset, poly_iou
 
 # for GENE tuning
-from core.eval_otb import eval_performance_tune
-from tensorboardX import SummaryWriter
+from core.eval_otb import eval_auc_tune
+eng = matlab.engine.start_matlab()  # for test eao in vot-toolkit
+                                    # start-up slowly TODO: speed up
 
 
 def parse_args():
@@ -124,8 +125,6 @@ def main():
     net.eval()
     net = net.cuda()
 
-
-
     # prepare video
     dataset = load_dataset(args.dataset)
     video_keys = list(dataset.keys()).copy()
@@ -188,22 +187,34 @@ def track_tune(tracker, net, video, config):
         elif f > start_frame:  # tracking
             state = tracker.track(state, im)  # track
             location = cxy_wh_2_rect(state['target_pos'], state['target_sz'])
-            regions.append(location)
+            b_overlap = poly_iou(gt[f], location) if 'VOT' in benchmark_name else 1
+            if b_overlap > 0:
+                regions.append(location)
+            else:
+                regions.append([float(2)])
+                lost_times += 1
+                start_frame = f + 5  # skip 5 frames
+        else:  # skip
+            regions.append([float(0)])
 
-    with open(result_path, "w") as fin:
-        for x in regions:
-            p_bbox = x.copy()
-            fin.write(
-                ','.join([str(i + 1) if idx == 0 or idx == 1 else str(i) for idx, i in enumerate(p_bbox)]) + '\n')
+        if benchmark_name.startswith('VOT'):
+            return regions
+        elif benchmark_name.startswith('OTB'):
+            with open(result_path, "w") as fin:
+                for x in regions:
+                    p_bbox = x.copy()
+                    fin.write(
+                        ','.join(
+                            [str(i + 1) if idx == 0 or idx == 1 else str(i) for idx, i in enumerate(p_bbox)]) + '\n')
 
-    return tracker_path
+            return tracker_path
+        else:
+            raise ValueError('not supported')
 
 
-
-def performance(tracker, net, config):
+def auc_otb(tracker, net, config):
     """
-    return performance evaluation value (eg. iou) to GENE
-    you should complete 'eval_performance_tune' according to your validation dataset
+    get AUC for OTB benchmark
     """
     dataset = load_dataset(config['benchmark'])
     video_keys = list(dataset.keys()).copy()
@@ -212,9 +223,25 @@ def performance(tracker, net, config):
     for video in video_keys:
         result_path = track_tune(tracker, net, dataset[video], config)
 
-    auc = eval_performance_tune(result_path, config['benchmark'])
+    auc = eval_auc_tune(result_path, config['benchmark'])
 
     return auc
+
+
+def eao_vot(tracker, net, config):
+    dataset = load_dataset(config['benchmark'])
+    video_keys = sorted(list(dataset.keys()).copy())
+    results = []
+    for video in video_keys:
+        video_result = track_tune(tracker, net, dataset[video], config)
+        results.append(video_result)
+
+    channel = config['benchmark'].split('VOT')[-1]
+
+    eng.cd('./lib/core')
+    eao = eng.get_eao(results, channel)
+
+    return eao
 
 
 if __name__ == '__main__':
