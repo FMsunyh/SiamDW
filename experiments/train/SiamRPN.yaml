@@ -1,5 +1,5 @@
 SIAMRPN:
-  GPUS: '0,1,2,3'
+  GPUS: '0'
   PRINT_FREQ: 10
   WORKERS: 32
   OUTPUT_DIR: 'logs'   # log file
@@ -15,7 +15,7 @@ SIAMRPN:
     STRIDE: 8
     BATCH: 32
     RESUME: False
-    PRETRAIN: 'pretrain.model'
+    PRETRAIN:  'CIResNet22_PRETRAIN.model'
     LR_POLICY: 'log'
     LR: 0.01
     LR_END: 0.00001
@@ -24,7 +24,8 @@ SIAMRPN:
     CLS_WEIGHT: 1
     REG_WEIGHT: 1
     CLS_TYPE: 'thicker'  # thicker or thinner
-    WHICH_USE: ['YTB', 'VID', 'COCO', 'DET']    # add any data you want eg: ['GOT10K', 'LASOT']
+    # WHICH_USE: ['YTB', 'VID', 'COCO', 'DET']    # add any data you want eg: ['GOT10K', 'LASOT']
+    WHICH_USE: ['VID']    # add any data you want eg: ['GOT10K', 'LASOT']
     ANCHORS_RATIOS: [0.33, 0.5, 1, 2, 3]
     ANCHORS_SCALES: [8]
     ANCHORS_THR_HIGH: 0.6
@@ -51,8 +52,8 @@ SIAMRPN:
     # add data path in WITCH_USE
     # you can ablate here to find witch data and ratio is better for your task
     VID:
-      PATH: '/data/home/zzp/data/vid/crop271'
-      ANNOTATION: '/data/home/zzp/data/vid/train.json'
+      PATH: '/home/syh/siamdw/data/vid/crop511'
+      ANNOTATION: '/home/syh/siamdw/data/vid/train.json'
       RANGE: 100
       USE: 200000
     YTB:
@@ -80,6 +81,10 @@ SIAMRPN:
       ANNOTATION: "/data/home/hopeng/data/lasot/train2017.json"
       RANGE: 100
       USE: 200000
-
+    GOT10K:
+      PATH: '/home/syh/siamdw/data/GOT10k/crop271'
+      ANNOTATION: '/home/syh/siamdw/data/GOT10k/train.json'
+      RANGE: 100
+      USE: 200000
 
 

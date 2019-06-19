@@ -106,20 +106,20 @@ class SiamFCDataset(Dataset):
         search_image = cv2.imread(search[0])
 
         # bbox =  center2corner(Center(search[1][0],search[1][1],search[1][2],search[1][3]))
-        bbox =  search[1]
-        search_image =  self._draw(search_image,  bbox, name='')
-        plt.imshow(search_image)
-        plt.title('origin')
-        plt.show()
+        # bbox =  search[1]
+        # search_image =  self._draw(search_image,  bbox, name='')
+        # plt.imshow(search_image)
+        # plt.title('origin')
+        # plt.show()
 
         template_box = self._toBBox(template_image, template[1])
         search_box = self._toBBox(search_image, search[1])
 
-        draw_search =  self._draw(search_image, search_box,name='')
+        # draw_search =  self._draw(search_image, search_box,name='')
 
-        plt.imshow(draw_search)
-        plt.title('x')
-        plt.show()
+        # plt.imshow(draw_search)
+        # plt.title('x')
+        # plt.show()
 
         # self._save_image_1(template_image,template_box,index, flag='z')
         # self._save_image_1(search_image,search_box,index,flag='x')

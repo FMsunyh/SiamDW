@@ -126,7 +126,7 @@ def main():
     logger.info(pprint.pformat(config))
 
     writer_dict = {
-        'writer': SummaryWriter(log_dir=tb_log_dir),
+        'writer': SummaryWriter(logdir=tb_log_dir),
         'train_global_steps': 0,
     }
 

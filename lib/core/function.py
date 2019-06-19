@@ -44,13 +44,13 @@ def siamfc_train(train_loader, model,  optimizer, epoch, cur_lr, cfg, writer_dic
         # compute gradient and do update step
         optimizer.zero_grad()
         loss.backward()
-        torch.nn.utils.clip_grad_norm(model.parameters(), 10)  # gradient clip
+        torch.nn.utils.clip_grad_norm_(model.parameters(), 10)  # gradient clip
 
-        if is_valid_number(loss.data[0]):
+        if is_valid_number(loss.item()):
             optimizer.step()
 
         # record loss
-        loss = loss.data[0]
+        loss = loss.item()
         losses.update(loss, template.size(0))
         batch_time.update(time.time() - end)
         end = time.time()
@@ -106,15 +106,15 @@ def siamrpn_train(train_loader, model,  optimizer, epoch, cur_lr, cfg, writer_di
         # compute gradient and do update step
         optimizer.zero_grad()
         loss.backward()
-        torch.nn.utils.clip_grad_norm(model.parameters(), 10)  # gradient clip
+        torch.nn.utils.clip_grad_norm_(model.parameters(), 10)  # gradient clip
 
-        if is_valid_number(loss.data[0]):
+        if is_valid_number(loss.item()):
             optimizer.step()
 
         # record loss
-        cls_loss = cls_loss.data[0]
-        loc_loss = loc_loss.data[0]
-        loss = loss.data[0]
+        cls_loss = cls_loss.item()
+        loc_loss = loc_loss.item()
+        loss = loss.item()
         losses.update(loss, template.size(0))
         cls_losses.update(cls_loss, template.size(0))
         reg_losses.update(loc_loss, template.size(0))

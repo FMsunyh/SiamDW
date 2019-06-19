@@ -34,7 +34,7 @@ def parse_args():
     """
     parser = argparse.ArgumentParser(description='Train SiamFC')
     # general
-    parser.add_argument('--cfg', required=True, type=str, default='/home/syh/siamdw/experiments/train/SiamFC.yaml', help='yaml configure file name')
+    parser.add_argument('--cfg', required=True, type=str, default='experiments/train/SiamFC.yaml', help='yaml configure file name')
 
     args, rest = parser.parse_known_args()
     # update config
@@ -139,7 +139,7 @@ def main():
     # [*] gpus parallel and model prepare
     # prepare
     model = models.__dict__[config.SIAMFC.TRAIN.MODEL]()  # build model
-    model = load_pretrain(model, config.SIAMFC.TRAIN.PRETRAIN)  # load pretrain
+    model = load_pretrain(model,'./pretrain/{0}'.format(config.SIAMFC.TRAIN.PRETRAIN))  # load pretrain
     trainable_params = check_trainable(model, logger)           # print trainable params info
     optimizer = get_optimizer(config, trainable_params)         # optimizer
     lr_scheduler = lr_decay(config, optimizer)      # learning rate decay scheduler
