@@ -13,7 +13,7 @@ import cv2
 import random
 import argparse
 import numpy as np
-import matlab.engine
+# import matlab.engine
 from os.path import exists, join
 import models.models as models
 from tracker.siamrpn import SiamRPN
@@ -21,7 +21,7 @@ from torch.autograd import Variable
 from easydict import EasyDict as edict
 from utils.utils import load_pretrain, cxy_wh_2_rect, get_axis_aligned_bbox, load_dataset, poly_iou
 
-eng = matlab.engine.start_matlab()
+# eng = matlab.engine.start_matlab()
 
 def parse_args():
     """
@@ -32,7 +32,7 @@ def parse_args():
     parser.add_argument('--resume', required=True, type=str, help='pretrained model')
     parser.add_argument('--dataset', default='VOT2017', help='dataset test')
     parser.add_argument('--anchor_nums', default=5, type=int, help='anchor numbers')
-    parser.add_argument('--cls_type', default="thicker", type=str, help='cls/loss type, thicker or thinner or else you defined')
+    parser.add_argument('--cls_type', default="thinner", type=str, help='cls/loss type, thicker or thinner or else you defined')
     parser.add_argument('--epoch_test', default=False, type=bool, help='multi-gpu epoch test flag')
     args = parser.parse_args()
 

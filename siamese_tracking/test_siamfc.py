@@ -13,7 +13,7 @@ import cv2
 import random
 import argparse
 import numpy as np
-import matlab.engine
+# import matlab.engine
 import models.models as models
 
 from os.path import exists, join
@@ -24,7 +24,7 @@ from utils.utils import load_pretrain, cxy_wh_2_rect, get_axis_aligned_bbox, loa
 
 # for GENE tuning
 from core.eval_otb import eval_auc_tune
-eng = matlab.engine.start_matlab()  # for test eao in vot-toolkit
+# eng = matlab.engine.start_matlab()  # for test eao in vot-toolkit
                                     # start-up slowly TODO: speed up
 
 

@@ -1,4 +1,6 @@
 # SiamRPN-PyTorch
+Copy from https://github.com/researchmm/SiamDW
+
 Implementation SiamRPN on PyTorch with GOT-10k dataset  
 
 High Performance Visual Tracking With Siamese Region Proposal Network 2018_CVPR
@@ -20,10 +22,6 @@ cd train
 
 python3 train_siamrpn.py --train_path=/path/to/dataset/GOT-10k/train
 ```
-
-## How to run Tracking
-[Coming Soon]
-
 
 ## pip install
 ```
@@ -72,6 +70,25 @@ After you have new_file.txt file. In this file a lot of information about where 
 </center>
 
 You do not need to change anything yourself, the fixed.py script will do it for you.
+
+## How to test
+### SiamFC
+```bash
+cd ~/siamdw
+python siamese_tracking/test_siamfc.py --arch SiamFCRes22 --resume /home/syh/siamdw/snapshot/CIResNet22.pth --dataset VOT2016 
+python siamese_tracking/test_siamfc.py --arch SiamFCRes22 --resume /home/syh/siamdw/snapshot/CIResNet22.pth --dataset OTB2013 
+```
+
+### SiamRPN
+```bash
+cd ~/siamdw
+python siamese_tracking/test_siamrpn.py --arch SiamRPNRes22 --resume /home/syh/siamdw/snapshot/CIResNet22_RPN.pth --dataset VOT2016 
+python siamese_tracking/test_siamrpn.py --arch SiamRPNRes22 --resume /home/syh/siamdw/snapshot/CIResNet22_RPN.pth --dataset OTB2013 
+```
+
+已经执行过预测，代码会直接跳过，不再执行测试.
+调试的时候要注意了，删除掉 /home/syh/siamdw/result
+
 
 ## Authors
 
